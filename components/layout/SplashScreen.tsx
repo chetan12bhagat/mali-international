@@ -7,12 +7,13 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const [showSplash, setShowSplash] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [videoSrc, setVideoSrc] = useState<string>("/splash.mp4");
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const dismissSplash = useCallback(() => {
     setShowSplash(false);
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("mali_splash_video_seen_v1", "true");
+      sessionStorage.setItem("mali_splash_video_v2", "true");
       document.body.style.overflow = "";
     }
   }, []);
@@ -20,8 +21,14 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   useEffect(() => {
     setIsMounted(true);
 
+    // Responsive video source selection
+    if (typeof window !== "undefined") {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      setVideoSrc(isMobile ? "/splash-mobile.mp4" : "/splash.mp4");
+    }
+
     // Check if user already saw the splash video in this session
-    const hasSeen = sessionStorage.getItem("mali_splash_video_seen_v1");
+    const hasSeen = sessionStorage.getItem("mali_splash_video_v2");
     if (hasSeen) {
       setShowSplash(false);
       return;
@@ -98,10 +105,11 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
               </svg>
             </motion.button>
 
-            {/* Full-bleed Edge-to-Edge Splash Video */}
+            {/* Full-bleed Edge-to-Edge Responsive Splash Video */}
             <video
+              key={videoSrc}
               ref={videoRef}
-              src="/splash.mp4"
+              src={videoSrc}
               poster="/splash.png"
               autoPlay
               muted
