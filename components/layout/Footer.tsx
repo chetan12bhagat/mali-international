@@ -15,14 +15,22 @@ export default function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
             {/* Brand */}
             <div className="lg:col-span-4">
-              <Link href="/" aria-label="Mali International Home">
+              <Link href="/" aria-label="Mali International Home" className="flex items-center gap-3">
                 <Image
-                  src="/logos/mali-logo.jpeg"
+                  src="/logos/main-logo.jpeg"
                   alt="Mali International"
-                  width={160}
-                  height={56}
-                  className="h-[48px] w-auto object-contain brightness-0 invert"
+                  width={64}
+                  height={64}
+                  className="h-[52px] w-auto object-contain rounded-full bg-white p-0.5 shadow-sm"
                 />
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold tracking-[0.08em] text-white uppercase font-sans leading-none">
+                    Mali International
+                  </span>
+                  <span className="text-[10px] tracking-[0.18em] text-gold uppercase font-semibold mt-1 leading-none">
+                    Global Trade &amp; Sourcing
+                  </span>
+                </div>
               </Link>
               <p className="mt-5 text-[0.9375rem] text-white/50 leading-relaxed max-w-[320px]">
                 {company.tagline}

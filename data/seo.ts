@@ -129,9 +129,9 @@ export function generatePageMetadata(pageKey: string): Metadata {
       type: "website",
       images: [
         {
-          url: `${siteConfig.url}/logos/mali-logo.jpeg`,
-          width: 1200,
-          height: 630,
+          url: `${siteConfig.url}/logos/main-logo.jpeg`,
+          width: 1080,
+          height: 1065,
           alt: company.name,
         },
       ],
@@ -140,7 +140,7 @@ export function generatePageMetadata(pageKey: string): Metadata {
       card: "summary_large_image",
       title: seo.title,
       description: seo.description,
-      images: [`${siteConfig.url}/logos/mali-logo.jpeg`],
+      images: [`${siteConfig.url}/logos/main-logo.jpeg`],
     },
   };
 }

@@ -40,9 +40,9 @@ export const metadata: Metadata = {
     description: company.description,
     images: [
       {
-        url: "/logos/mali-logo.jpeg",
-        width: 1200,
-        height: 630,
+        url: "/logos/main-logo.jpeg",
+        width: 1080,
+        height: 1065,
         alt: company.name,
       },
     ],
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mali International | India Export & Global Sourcing Company",
     description: company.description,
-    images: ["/logos/mali-logo.jpeg"],
+    images: ["/logos/main-logo.jpeg"],
   },
   robots: {
     index: true,
@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@type": "Organization",
     name: company.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logos/mali-logo.jpeg`,
+    logo: `${siteConfig.url}/logos/main-logo.jpeg`,
     description: company.description,
     address: {
       "@type": "PostalAddress",

@@ -1,19 +1,17 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export default function SplashScreen({ children }: { children: React.ReactNode }) {
   const [showSplash, setShowSplash] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [videoSrc, setVideoSrc] = useState<string>("/splash.mp4");
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const dismissSplash = useCallback(() => {
     setShowSplash(false);
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("mali_splash_video_v2", "true");
+      sessionStorage.setItem("mali_splash_logo_v1", "true");
       document.body.style.overflow = "";
     }
   }, []);
@@ -21,70 +19,44 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   useEffect(() => {
     setIsMounted(true);
 
-    // Responsive video source selection
-    if (typeof window !== "undefined") {
-      const isMobile = window.matchMedia("(max-width: 768px)").matches;
-      setVideoSrc(isMobile ? "/splash-mobile.mp4" : "/splash.mp4");
-    }
-
-    // Check if user already saw the splash video in this session
-    const hasSeen = sessionStorage.getItem("mali_splash_video_v2");
+    // Check if user already saw this splash in current session
+    const hasSeen = sessionStorage.getItem("mali_splash_logo_v1");
     if (hasSeen) {
       setShowSplash(false);
       return;
     }
 
-    // Lock page scrolling during splash playback
+    // Lock page scrolling during splash screen
     document.body.style.overflow = "hidden";
 
-    // Play video programmatically once mounted
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay policy fallback
-      });
-    }
-
-    // Safety fallback: dismiss after 8 seconds max if video playback stalls
-    const safetyTimer = setTimeout(() => {
+    // Auto-dismiss after 2.3 seconds
+    const timer = setTimeout(() => {
       dismissSplash();
-    }, 8000);
+    }, 2300);
 
     return () => {
-      clearTimeout(safetyTimer);
+      clearTimeout(timer);
       document.body.style.overflow = "";
     };
   }, [dismissSplash]);
-
-  const handleTimeUpdate = () => {
-    if (videoRef.current && videoRef.current.duration) {
-      const pct = (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      setProgress(pct);
-    }
-  };
 
   return (
     <>
       <AnimatePresence mode="wait">
         {showSplash && isMounted && (
           <motion.div
-            key="splash-video-screen"
-            className="fixed inset-0 z-[99999] w-screen h-screen overflow-hidden select-none cursor-pointer bg-slate-900 flex items-center justify-center"
+            key="splash-logo-screen"
+            className="fixed inset-0 z-[99999] w-screen h-screen overflow-hidden select-none cursor-pointer flex flex-col items-center justify-center bg-gradient-to-b from-[#FAFBFD] via-[#F4F6F9] to-[#EDF1F6]"
             initial={{ opacity: 1 }}
             exit={{
               opacity: 0,
-              scale: 1.02,
-              transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+              scale: 1.015,
+              transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
             }}
             onClick={dismissSplash}
           >
-            {/* Top slim luxury brand loading progress line */}
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/10 z-30 overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#C5A059] via-[#D4AF37] to-[#0A192F]"
-                style={{ width: `${Math.max(progress, 3)}%` }}
-                transition={{ ease: "linear", duration: 0.1 }}
-              />
-            </div>
+            {/* Ambient background soft light glow */}
+            <div className="absolute w-[500px] h-[500px] rounded-full bg-gold/10 blur-[120px] pointer-events-none" />
 
             {/* Skip Button */}
             <motion.button
@@ -93,7 +65,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
                 e.stopPropagation();
                 dismissSplash();
               }}
-              className="absolute top-6 right-6 z-30 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] tracking-wider uppercase font-semibold text-white/90 hover:text-white bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 shadow-lg transition-all duration-200"
+              className="absolute top-6 right-6 z-30 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] tracking-wider uppercase font-semibold text-slate-600 hover:text-navy bg-white/80 hover:bg-white backdrop-blur-md border border-slate-200/80 shadow-xs transition-all duration-200"
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -105,20 +77,68 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
               </svg>
             </motion.button>
 
-            {/* Full-bleed Edge-to-Edge Responsive Splash Video */}
-            <video
-              key={videoSrc}
-              ref={videoRef}
-              src={videoSrc}
-              poster="/splash.png"
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              onEnded={dismissSplash}
-              onTimeUpdate={handleTimeUpdate}
-              className="w-full h-full object-cover object-center pointer-events-none"
-            />
+            {/* Main Logo & Brand Presentation */}
+            <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-md">
+              {/* Emblem with subtle animated glow ring */}
+              <motion.div
+                className="relative mb-6"
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="relative w-40 h-40 md:w-48 md:h-48 rounded-full p-2 bg-white shadow-[0_12px_40px_rgba(10,25,47,0.08)] border border-slate-100 flex items-center justify-center">
+                  <Image
+                    src="/logos/main-logo.jpeg"
+                    alt="Mali International"
+                    width={200}
+                    height={200}
+                    className="w-full h-full object-contain rounded-full"
+                    priority
+                    quality={100}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Title Typography */}
+              <motion.h1
+                className="text-2xl md:text-3xl font-bold tracking-[0.18em] text-navy uppercase font-sans mb-2"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.6 }}
+              >
+                Mali International
+              </motion.h1>
+
+              {/* Golden accent line */}
+              <motion.div
+                className="w-16 h-[2.5px] bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mb-3"
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 64, opacity: 1 }}
+                transition={{ delay: 0.35, duration: 0.6 }}
+              />
+
+              {/* Tagline */}
+              <motion.p
+                className="text-xs md:text-sm tracking-[0.22em] text-slate-500 uppercase font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.45, duration: 0.5 }}
+              >
+                Global Trade · Trusted Partnerships
+              </motion.p>
+            </div>
+
+            {/* Bottom Progress Line */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 md:w-56 flex flex-col items-center gap-2 pointer-events-none">
+              <div className="w-full h-[2.5px] bg-slate-200/80 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-[#C5A059] via-[#D4AF37] to-[#0A192F] rounded-full"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 2.1, ease: "easeInOut" }}
+                />
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

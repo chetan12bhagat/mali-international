@@ -53,17 +53,25 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="relative z-10 flex items-center shrink-0"
+            className="relative z-10 flex items-center gap-2.5 md:gap-3 shrink-0"
             aria-label="Mali International Home"
           >
             <Image
-              src="/logos/mali-logo.jpeg"
+              src="/logos/main-logo.jpeg"
               alt="Mali International"
-              width={140}
-              height={50}
-              className="h-[44px] md:h-[50px] w-auto object-contain"
+              width={60}
+              height={60}
+              className="h-[46px] md:h-[52px] w-auto object-contain rounded-full shadow-xs border border-slate-100"
               priority
             />
+            <div className="flex flex-col">
+              <span className="text-[0.95rem] md:text-[1.1rem] font-bold tracking-[0.08em] text-navy uppercase font-sans leading-none">
+                Mali International
+              </span>
+              <span className="text-[9px] md:text-[10px] tracking-[0.16em] text-gold uppercase font-semibold mt-0.5 leading-none">
+                Global Trade &amp; Sourcing
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
