@@ -24,9 +24,8 @@ export const quoteFormSchema = z.object({
   unit: z.string().optional(),
   destination: z.string().optional(),
   packaging: z.string().optional(),
-  specifications: z.string().optional(),
   expectedDelivery: z.string().optional(),
-  additionalRequirements: z.string().optional(),
+  message: z.string().optional(),
 });
 
 export type QuoteFormData = z.infer<typeof quoteFormSchema>;

@@ -1,22 +1,30 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { TrendingUp, AlertCircle, ArrowRight } from "lucide-react";
 import { generatePageMetadata } from "@/data/seo";
 import Container from "@/components/layout/Container";
 import SectionLabel from "@/components/ui/SectionLabel";
 import AnimatedSection from "@/components/ui/AnimatedSection";
-import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { productCategories } from "@/data/products";
+import ProductSearchFilter from "@/components/products/ProductSearchFilter";
+import { agriculturalProducts } from "@/data/products";
+import { getRateStatusInfo, marketRateConfig } from "@/data/market-rates";
 
 export const metadata: Metadata = generatePageMetadata("agriculture");
 
-export default function AgriculturePage() {
-  const category = productCategories.find((c) => c.slug === "agriculture")!;
+interface AgriculturePageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
+export default async function AgriculturePage({ searchParams }: AgriculturePageProps) {
+  const resolvedParams = await searchParams;
+  const initialCategory = resolvedParams.category || "All";
+  const rateInfo = getRateStatusInfo();
 
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-[clamp(60px,10vw,120px)] bg-off-white">
+      <section className="pt-32 pb-[clamp(40px,6vw,80px)] bg-off-white border-b border-light-gray">
         <Container>
           <Breadcrumb
             items={[
@@ -26,70 +34,106 @@ export default function AgriculturePage() {
             ]}
           />
           <AnimatedSection>
-            <SectionLabel className="mb-4">Agriculture</SectionLabel>
-            <h1 className="text-dark-text mb-6 max-w-3xl">Agricultural Products</h1>
-            <p className="text-xl text-muted max-w-[620px] leading-relaxed">
-              Sourcing selected Indian agricultural products for international buyers. Subject to
-              current availability and buyer requirements.
-            </p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="max-w-2xl">
+                <SectionLabel className="mb-3">Agri Export Desk</SectionLabel>
+                <h1 className="text-3xl md:text-5xl font-bold text-dark-text tracking-tight mb-4">
+                  Agricultural Products
+                </h1>
+                <p className="text-lg md:text-xl text-muted leading-relaxed">
+                  Selected Indian agricultural products for international sourcing.
+                </p>
+              </div>
+
+              {/* Live Rate Status Banner */}
+              <div className="bg-white border border-slate-200/80 rounded-[4px] p-4 shadow-xs md:max-w-xs shrink-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <TrendingUp className="w-4 h-4 text-gold" />
+                  <span className="text-xs font-bold text-navy uppercase tracking-wider">
+                    {rateInfo.badgeLabel}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mb-2">
+                  Published: <span className="font-semibold text-slate-700">{rateInfo.publishedDateFormatted}</span>
+                </p>
+                <Link
+                  href="/market-rates"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-gold hover:underline"
+                >
+                  View full daily market rate sheet →
+                </Link>
+              </div>
+            </div>
           </AnimatedSection>
         </Container>
       </section>
 
-      {/* Products Grid */}
-      <section className="py-[clamp(60px,10vw,150px)] bg-white">
+      {/* Mandatory Market Rate Disclaimer Banner */}
+      <section className="bg-amber-50/60 border-b border-amber-200/60 py-3 text-xs text-amber-900">
         <Container>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-            {category.products.map((product, i) => (
-              <AnimatedSection key={product.id} delay={i * 0.05}>
-                <div className="bg-off-white hover:bg-light-gray transition-colors duration-300 p-6 md:p-8 group">
-                  <h3 className="text-lg font-semibold text-dark-text mb-2">{product.name}</h3>
-                  <p className="text-sm text-muted leading-relaxed mb-4">{product.description}</p>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between border-t border-light-gray pt-2">
-                      <span className="text-muted">Origin</span>
-                      <span className="text-dark-text font-medium">{product.origin}</span>
-                    </div>
-                    <div className="flex justify-between border-t border-light-gray pt-2">
-                      <span className="text-muted">Packaging</span>
-                      <span className="text-dark-text font-medium">{product.packaging}</span>
-                    </div>
-                    <div className="flex justify-between border-t border-light-gray pt-2">
-                      <span className="text-muted">Availability</span>
-                      <span className="text-dark-text font-medium text-right max-w-[200px]">
-                        {product.availability}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-light-gray">
-                    <Link
-                      href="/request-quote"
-                      className="text-sm font-medium text-navy hover:text-gold transition-colors"
-                    >
-                      Request Quote →
-                    </Link>
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
+            <p className="leading-normal">
+              <span className="font-semibold">Important Pricing Notice:</span> All prices shown are indicative
+              market rates and valid for 24 hours. Rates may fluctuate based on grade, quantity, packaging,
+              origin, and ocean logistics.
+            </p>
           </div>
         </Container>
       </section>
 
-      {/* CTA */}
-      <section className="py-[clamp(60px,10vw,120px)] bg-[#082B57] text-white">
+      {/* Main Search, Filter & Product Grid Section */}
+      <section className="py-[clamp(40px,6vw,100px)] bg-slate-50/40">
         <Container>
-          <AnimatedSection>
-            <div className="text-center max-w-xl mx-auto">
-              <h2 className="text-white mb-6">Need agricultural products from India?</h2>
-              <p className="text-white/50 mb-8 text-lg">
-                Share your requirements and we&apos;ll help connect you with the right suppliers.
+          <ProductSearchFilter
+            products={agriculturalProducts}
+            initialCategory={initialCategory}
+          />
+        </Container>
+      </section>
+
+      {/* Sourcing Process & Rate Inclusions Note */}
+      <section className="py-16 bg-white border-t border-light-gray">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-6 bg-slate-50 border border-slate-200/80 rounded-[4px]">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-navy mb-2">
+                Rate Inclusions
+              </h3>
+              <p className="text-xs text-muted leading-relaxed">
+                {marketRateConfig.rateInclusionsNote}
               </p>
-              <Button href="/request-quote" variant="secondary" size="lg">
-                Send Your Requirement
-              </Button>
             </div>
-          </AnimatedSection>
+
+            <div className="p-6 bg-slate-50 border border-slate-200/80 rounded-[4px]">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-navy mb-2">
+                Indicative Payment Terms
+              </h3>
+              <p className="text-xs text-muted leading-relaxed mb-2">
+                <strong className="text-slate-800">{marketRateConfig.paymentTerms.advance}</strong> &middot;{" "}
+                <strong className="text-slate-800">{marketRateConfig.paymentTerms.balance}</strong>
+              </p>
+              <p className="text-[11px] text-slate-400">
+                {marketRateConfig.paymentTerms.note}
+              </p>
+            </div>
+
+            <div className="p-6 bg-slate-50 border border-slate-200/80 rounded-[4px]">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-navy mb-2">
+                Dedicated Trade Desk
+              </h3>
+              <p className="text-xs text-muted leading-relaxed mb-3">
+                Need bulk container stuffing, customized private labeling, or CIF/FOB pricing?
+              </p>
+              <Link
+                href="/request-quote"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy hover:text-gold transition-colors"
+              >
+                Request Commercial Quotation
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
         </Container>
       </section>
     </>

@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, TrendingUp } from "lucide-react";
 import Container from "@/components/layout/Container";
 import SectionLabel from "@/components/ui/SectionLabel";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
-import { productCategories, featuredProducts } from "@/data/products";
+import { productCategories, featuredProducts, getFeaturedAgriProducts } from "@/data/products";
+import { getRateStatusInfo } from "@/data/market-rates";
+import AgriProductCard from "@/components/products/AgriProductCard";
 import { services, processSteps } from "@/data/services";
 import { globalMarkets } from "@/lib/constants";
 
@@ -155,47 +157,71 @@ function AboutIntro() {
 }
 
 /* ============================================
-   PRODUCTS
+   FEATURED AGRICULTURAL PRODUCTS
    ============================================ */
-function Products() {
+function FeaturedAgriProducts() {
+  const featured = getFeaturedAgriProducts(6);
+  const rateInfo = getRateStatusInfo();
+
   return (
-    <section className="py-[clamp(60px,10vw,150px)] bg-off-white">
+    <section className="py-[clamp(60px,10vw,140px)] bg-off-white border-b border-light-gray">
       <Container>
         <AnimatedSection>
-          <div className="mb-12 md:mb-16">
-            <SectionLabel className="mb-4">What We Source</SectionLabel>
-            <h2 className="text-dark-text">Products We Source</h2>
-            <p className="text-muted mt-4 max-w-[480px]">
-              Explore sourcing opportunities across agriculture, commodities,
-              minerals and custom requirements.
-            </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <SectionLabel className="mb-3">Live Sourcing Rates</SectionLabel>
+              <h2 className="text-3xl md:text-4xl font-bold text-dark-text tracking-tight">
+                Featured Agricultural Products
+              </h2>
+              <p className="text-muted mt-3 max-w-xl text-base md:text-lg">
+                Direct export sourcing from verified Indian farm belts with daily indicative market rates.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <Link
+                href="/products/agriculture"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white text-xs font-semibold rounded-[3px] hover:bg-navy-dark transition-colors"
+              >
+                View All Products
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <Link
+                href="/market-rates"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white text-navy text-xs font-semibold rounded-[3px] border border-slate-200 hover:bg-slate-50 transition-colors"
+              >
+                Rate Sheet
+              </Link>
+            </div>
           </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-          {productCategories.map((cat, i) => (
-            <AnimatedSection key={cat.id} delay={i * 0.1}>
-              <Link
-                href={`/products/${cat.slug}`}
-                className="group block relative overflow-hidden bg-white hover:bg-light-gray transition-colors duration-300 p-8 md:p-10"
-              >
-                <span className="text-xs font-semibold text-gold tracking-[0.1em] mb-3 block">
-                  {cat.number}
-                </span>
-                <h3 className="text-xl font-semibold text-dark-text group-hover:text-navy transition-colors duration-200 mb-3">
-                  {cat.title}
-                </h3>
-                <p className="text-sm text-muted leading-relaxed line-clamp-2 mb-6">
-                  {cat.description}
-                </p>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-navy">Explore</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-navy transition-transform duration-200 group-hover:translate-x-[3px]" />
-                  <span className="ml-auto block w-0 h-[2px] bg-gold transition-all duration-300 group-hover:w-8" />
-                </div>
-              </Link>
-            </AnimatedSection>
+        {/* 6 Featured Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {featured.map((product) => (
+            <AgriProductCard key={product.id} product={product} />
           ))}
+        </div>
+
+        {/* Bottom Rates Banner */}
+        <div className="bg-white border border-slate-200 rounded-[4px] p-4 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gold/15 text-gold flex items-center justify-center shrink-0">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-navy">
+                Looking for full commercial container allocations?
+              </p>
+              <p className="text-xs text-muted">
+                Published {rateInfo.publishedDateFormatted} · {rateInfo.validityText} · Subject to final confirmation
+              </p>
+            </div>
+          </div>
+
+          <Button href="/request-quote" size="default">
+            Request Commercial Quote
+          </Button>
         </div>
       </Container>
     </section>
@@ -203,28 +229,94 @@ function Products() {
 }
 
 /* ============================================
-   FEATURED PRODUCT STRIP
+   PRODUCT CATEGORIES SECTION
    ============================================ */
-function FeaturedStrip() {
+function ProductCategoriesSection() {
+  const categories = [
+    {
+      title: "Fresh Vegetables",
+      desc: "Export-graded G4 chillies, onions (55+ mm), drumsticks, pumpkins, and yam.",
+      href: "/products/agriculture?category=Vegetables",
+      image: "/images/products/g4-chilli.jpg",
+      tag: "6 Commodities",
+    },
+    {
+      title: "Fresh Fruits",
+      desc: "Cavendish bananas from Solapur and premium Bhagwa pomegranates.",
+      href: "/products/agriculture?category=Fruits",
+      image: "/images/products/banana.jpg",
+      tag: "3 Commodities",
+    },
+    {
+      title: "Spices",
+      desc: "High-curcumin whole turmeric fingers and export-washed fresh ginger.",
+      href: "/products/agriculture?category=Spices",
+      image: "/images/products/turmeric.jpg",
+      tag: "2 Commodities",
+    },
+    {
+      title: "Coconut Products",
+      desc: "Mature semi-husked coconuts from Pollachi region packed for ocean freight.",
+      href: "/products/agriculture?category=Coconut",
+      image: "/images/products/semi-husk-coconut.jpg",
+      tag: "Ocean Grade",
+    },
+    {
+      title: "Custom Requirements",
+      desc: "Bespoke sourcing, contract farming, private labeling, and port delivery.",
+      href: "/request-quote",
+      image: "/images/products/onion.jpg",
+      tag: "Contract Sourcing",
+    },
+  ];
+
   return (
-    <section className="py-10 md:py-14 bg-white border-y border-light-gray overflow-hidden">
+    <section className="py-[clamp(60px,10vw,140px)] bg-white">
       <Container>
-        <div className="flex items-center gap-8 md:gap-12 overflow-x-auto scrollbar-hide pb-2">
-          {featuredProducts.map((product, i) => (
-            <div key={i} className="flex items-center gap-3 shrink-0">
-              <span className="block w-2 h-2 rounded-full bg-gold/60" />
-              <span className="text-sm md:text-base font-medium text-dark-text whitespace-nowrap">
-                {product}
-              </span>
-            </div>
+        <AnimatedSection>
+          <div className="mb-12 max-w-2xl">
+            <SectionLabel className="mb-3">What We Source</SectionLabel>
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-text tracking-tight mb-3">
+              Commodity Categories
+            </h2>
+            <p className="text-muted leading-relaxed">
+              Explore primary agricultural supply lines sourced from certified farm belts across India.
+            </p>
+          </div>
+        </AnimatedSection>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categories.map((cat, i) => (
+            <AnimatedSection key={cat.title} delay={i * 0.08}>
+              <Link
+                href={cat.href}
+                className="group block bg-slate-50 hover:bg-white border border-slate-200/80 hover:border-gold/40 hover:shadow-[0_8px_24px_rgba(10,25,47,0.06)] rounded-[4px] overflow-hidden transition-all duration-300"
+              >
+                <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-bold text-gold bg-navy/90 rounded-[2px] tracking-wider">
+                    {cat.tag}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-dark-text group-hover:text-navy transition-colors mb-2">
+                    {cat.title}
+                  </h3>
+                  <p className="text-xs text-muted leading-relaxed mb-4">{cat.desc}</p>
+                  <div className="flex items-center gap-1 text-xs font-semibold text-navy group-hover:text-gold transition-colors">
+                    <span>Explore Products</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </div>
+              </Link>
+            </AnimatedSection>
           ))}
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 text-sm font-medium text-navy shrink-0 group"
-          >
-            View Product Categories
-            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-[3px]" />
-          </Link>
         </div>
       </Container>
     </section>
@@ -540,8 +632,8 @@ export default function HomePage() {
       <Hero />
       <TrustStrip />
       <AboutIntro />
-      <Products />
-      <FeaturedStrip />
+      <FeaturedAgriProducts />
+      <ProductCategoriesSection />
       <Services />
       <HowWeWork />
       <GlobalReach />

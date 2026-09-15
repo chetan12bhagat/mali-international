@@ -11,6 +11,7 @@ export const mainNavigation: NavItem[] = [
     href: "/products",
     children: [
       { label: "Agricultural Products", href: "/products/agriculture" },
+      { label: "Current Market Rates", href: "/market-rates" },
       { label: "Food & Commodities", href: "/products/food-commodities" },
       { label: "Minerals & Raw Materials", href: "/products/minerals" },
       { label: "Custom Sourcing", href: "/products/custom-sourcing" },
@@ -39,6 +40,7 @@ export const footerNavigation = {
   ],
   products: [
     { label: "Agricultural Products", href: "/products/agriculture" },
+    { label: "Current Market Rates", href: "/market-rates" },
     { label: "Food & Commodities", href: "/products/food-commodities" },
     { label: "Minerals & Raw Materials", href: "/products/minerals" },
     { label: "Custom Sourcing", href: "/products/custom-sourcing" },
