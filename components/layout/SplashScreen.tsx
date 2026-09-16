@@ -13,7 +13,7 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   const dismissSplash = useCallback(() => {
     setShowSplash(false);
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("mali_splash_fullscreen_v1", "true");
+      sessionStorage.setItem("mali_splash_seen_active", "true");
       document.body.style.overflow = "";
     }
   }, []);
@@ -21,49 +21,62 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
   useEffect(() => {
     setIsMounted(true);
 
-    // Check if user already saw this splash video in current session
-    const hasSeen = sessionStorage.getItem("mali_splash_fullscreen_v1");
-    if (hasSeen) {
-      setShowSplash(false);
-      return;
+    if (typeof window !== "undefined") {
+      // If the user reloaded the page (e.g. reviewing changes), allow splash to play again
+      const navEntries = performance.getEntriesByType("navigation");
+      const isReload =
+        navEntries.length > 0 &&
+        (navEntries[0] as PerformanceNavigationTiming).type === "reload";
+
+      if (isReload) {
+        sessionStorage.removeItem("mali_splash_seen_active");
+      }
+
+      // Check if user already saw this splash in this session
+      const hasSeen = sessionStorage.getItem("mali_splash_seen_active");
+      if (hasSeen && !isReload) {
+        setShowSplash(false);
+        return;
+      }
     }
 
     // Lock page scrolling during splash playback
     document.body.style.overflow = "hidden";
 
-    // Play video with sound always on
-    const startPlayback = async () => {
-      const v = mainVideoRef.current;
-      if (!v) return;
-
-      // Unmuted by default (Sound always on)
-      v.muted = false;
-
-      try {
-        await v.play();
-      } catch {
-        // If the browser strictly restricts unmuted autoplay without prior user gesture,
-        // start playback muted and unmute immediately on the user's first touch/click
-        v.muted = true;
-        try {
-          await v.play();
-        } catch {
-          // Playback error fallback
-        }
-
-        const unmuteOnInteraction = () => {
-          if (mainVideoRef.current) {
-            mainVideoRef.current.muted = false;
+    // Play video immediately
+    const v = mainVideoRef.current;
+    if (v) {
+      // Start playback (muted in HTML tag guarantees browser autoplay permission)
+      v.play()
+        .then(() => {
+          // Attempt to unmute immediately (sound always on)
+          try {
+            v.muted = false;
+          } catch {
+            // If browser blocks unmuted audio without gesture, stay muted until touch
+            v.muted = true;
           }
-          window.removeEventListener("click", unmuteOnInteraction);
-          window.removeEventListener("touchstart", unmuteOnInteraction);
-        };
-        window.addEventListener("click", unmuteOnInteraction, { once: true });
-        window.addEventListener("touchstart", unmuteOnInteraction, { once: true });
+        })
+        .catch(() => {
+          // Fallback if low power mode or strict policy
+          v.muted = true;
+          v.play().catch(() => {});
+        });
+    }
+
+    // Unmute on first user touch, tap, or interaction anywhere on screen
+    const enableSoundOnInteraction = () => {
+      if (mainVideoRef.current) {
+        mainVideoRef.current.muted = false;
       }
+      window.removeEventListener("pointerdown", enableSoundOnInteraction);
+      window.removeEventListener("touchstart", enableSoundOnInteraction);
+      window.removeEventListener("click", enableSoundOnInteraction);
     };
 
-    startPlayback();
+    window.addEventListener("pointerdown", enableSoundOnInteraction, { once: true });
+    window.addEventListener("touchstart", enableSoundOnInteraction, { once: true });
+    window.addEventListener("click", enableSoundOnInteraction, { once: true });
 
     // Safety fallback: auto-dismiss after 12 seconds max if video playback stalls
     const safetyTimer = setTimeout(() => {
@@ -73,6 +86,9 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
     return () => {
       clearTimeout(safetyTimer);
       document.body.style.overflow = "";
+      window.removeEventListener("pointerdown", enableSoundOnInteraction);
+      window.removeEventListener("touchstart", enableSoundOnInteraction);
+      window.removeEventListener("click", enableSoundOnInteraction);
     };
   }, [dismissSplash]);
 
@@ -89,15 +105,14 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
         {showSplash && isMounted && (
           <motion.div
             key="splash-video-screen"
-            className="fixed inset-0 z-[99999] w-screen h-screen overflow-hidden select-none bg-black cursor-pointer"
+            className="fixed inset-0 z-[99999] w-screen h-screen overflow-hidden select-none bg-black"
             initial={{ opacity: 1 }}
             exit={{
               opacity: 0,
               scale: 1.02,
-              filter: "blur(8px)",
-              transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+              filter: "blur(6px)",
+              transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
             }}
-            onClick={dismissSplash}
           >
             {/* Top luxury gold loading progress line */}
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/10 z-40 overflow-hidden pointer-events-none">
@@ -111,11 +126,8 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
             {/* Skip Button */}
             <motion.button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                dismissSplash();
-              }}
-              className="absolute top-5 right-5 sm:top-7 sm:right-8 z-50 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] tracking-wider uppercase font-semibold text-white/95 hover:text-white bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 hover:border-[#E6CA85] shadow-lg transition-all duration-200 cursor-pointer"
+              onClick={dismissSplash}
+              className="absolute top-5 right-5 sm:top-7 sm:right-8 z-50 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] tracking-wider uppercase font-semibold text-white/95 hover:text-white bg-black/50 hover:bg-black/70 backdrop-blur-md border border-white/20 hover:border-[#E6CA85] shadow-lg transition-all duration-200 cursor-pointer"
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -132,13 +144,15 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
               ref={mainVideoRef}
               src="/splash.mp4"
               autoPlay
+              muted
               playsInline
               preload="auto"
               disablePictureInPicture
               controls={false}
               onEnded={dismissSplash}
               onTimeUpdate={handleTimeUpdate}
-              className="w-full h-full object-cover object-center pointer-events-none"
+              onClick={dismissSplash}
+              className="w-full h-full object-cover object-center cursor-pointer"
             />
           </motion.div>
         )}
@@ -151,5 +165,6 @@ export default function SplashScreen({ children }: { children: React.ReactNode }
     </>
   );
 }
+
 
 
