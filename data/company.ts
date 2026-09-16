@@ -14,8 +14,8 @@ export const company = {
   website: "https://maliinternational.com",
   social: {
     linkedin: "",
-    instagram: "",
-    facebook: "",
+    instagram: "https://www.instagram.com/mali.international?utm_source=qr&stkn=ZzFxM3k4eW11OGNl",
+    facebook: "https://www.facebook.com/share/1E2NJ2akDq/",
     twitter: "",
   },
 } as const;

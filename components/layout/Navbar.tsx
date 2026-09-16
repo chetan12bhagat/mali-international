@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, ChevronDown } from "lucide-react";
 import { mainNavigation, mobileNavigation } from "@/data/navigation";
+import { company } from "@/data/company";
+import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 import Container from "./Container";
 
 export default function Navbar() {
@@ -207,15 +209,40 @@ export default function Navbar() {
                 ))}
               </div>
 
-              <div className="mt-8 pt-6 border-t border-light-gray">
+              <div className="mt-8 pt-6 border-t border-light-gray space-y-4">
                 <Link
-                  href="/request-quote"
+                  href="/contact"
                   className="flex items-center justify-center gap-2 w-full py-3.5 bg-navy text-white font-medium rounded-sm hover:bg-navy-dark transition-colors"
                   onClick={() => setMobileOpen(false)}
                 >
-                  Request a Quote
+                  Let&apos;s Talk
                   <ArrowRight className="w-4 h-4" />
                 </Link>
+
+                <div className="flex items-center justify-center gap-3 pt-2">
+                  {company.social.instagram && (
+                    <a
+                      href={company.social.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Mali International on Instagram"
+                      className="w-10 h-10 rounded-full bg-slate-100 hover:bg-pink-50 border border-slate-200 hover:border-pink-200 text-slate-700 hover:text-pink-600 flex items-center justify-center transition-colors"
+                    >
+                      <InstagramIcon className="w-4 h-4" />
+                    </a>
+                  )}
+                  {company.social.facebook && (
+                    <a
+                      href={company.social.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Mali International on Facebook"
+                      className="w-10 h-10 rounded-full bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-slate-700 hover:text-blue-600 flex items-center justify-center transition-colors"
+                    >
+                      <FacebookIcon className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
               </div>
             </nav>
           </motion.div>

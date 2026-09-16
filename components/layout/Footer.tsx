@@ -3,6 +3,7 @@ import Image from "next/image";
 import Container from "./Container";
 import { company } from "@/data/company";
 import { footerNavigation } from "@/data/navigation";
+import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -35,6 +36,32 @@ export default function Footer() {
               <p className="mt-5 text-[0.9375rem] text-white/50 leading-relaxed max-w-[320px]">
                 {company.tagline}
               </p>
+
+              {/* Social Media Links */}
+              <div className="mt-6 flex items-center gap-2.5">
+                {company.social.instagram && (
+                  <a
+                    href={company.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Mali International on Instagram"
+                    className="w-9 h-9 rounded-full bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold/40 text-white/70 hover:text-gold flex items-center justify-center transition-all duration-200"
+                  >
+                    <InstagramIcon className="w-4 h-4" />
+                  </a>
+                )}
+                {company.social.facebook && (
+                  <a
+                    href={company.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Mali International on Facebook"
+                    className="w-9 h-9 rounded-full bg-white/5 hover:bg-gold/20 border border-white/10 hover:border-gold/40 text-white/70 hover:text-gold flex items-center justify-center transition-all duration-200"
+                  >
+                    <FacebookIcon className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
             </div>
 
             {/* Links */}

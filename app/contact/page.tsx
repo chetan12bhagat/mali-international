@@ -9,6 +9,7 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { contactFormSchema, ContactFormData } from "@/lib/validation";
 import { company } from "@/data/company";
+import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -101,6 +102,38 @@ export default function ContactPage() {
                     <span className="text-xs uppercase tracking-wider text-muted block mb-1">Location</span>
                     <span className="text-dark-text font-medium">{company.country}</span>
                   </div>
+
+                  {(company.social.instagram || company.social.facebook) && (
+                    <div className="pt-2">
+                      <span className="text-xs uppercase tracking-wider text-muted block mb-2.5">
+                        Follow &amp; Connect
+                      </span>
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        {company.social.instagram && (
+                          <a
+                            href={company.social.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-50 hover:bg-pink-50 border border-slate-200 hover:border-pink-200 text-slate-700 hover:text-pink-600 rounded-[3px] text-xs font-semibold transition-all duration-200"
+                          >
+                            <InstagramIcon className="w-4 h-4 text-pink-600" />
+                            Instagram
+                          </a>
+                        )}
+                        {company.social.facebook && (
+                          <a
+                            href={company.social.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-slate-700 hover:text-blue-600 rounded-[3px] text-xs font-semibold transition-all duration-200"
+                          >
+                            <FacebookIcon className="w-4 h-4 text-blue-600" />
+                            Facebook
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </AnimatedSection>
             </div>
