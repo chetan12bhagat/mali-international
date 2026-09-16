@@ -19,16 +19,16 @@ import { getRateStatusInfo, marketRateConfig } from "@/data/market-rates";
 import { createWhatsAppEnquiryUrl } from "@/data/company";
 
 export const metadata: Metadata = {
-  title: "Current Agricultural Market Rates India | Mali International",
+  title: "Agricultural Commodity Export Specifications | Mali International",
   description:
-    "View indicative daily market rates for Indian agricultural products and commodities including chillies, lemons, onions, bananas, and coconuts.",
+    "View export packaging calibrations, grading specifications, and custom sourcing quotations for Indian agricultural products including chillies, lemons, onions, bananas, and coconuts.",
   alternates: {
     canonical: "https://maliinternational.com/market-rates",
   },
 };
 
 export default function MarketRatesPage() {
-  const rateInfo = getRateStatusInfo();
+
 
   return (
     <>
@@ -46,36 +46,33 @@ export default function MarketRatesPage() {
           <AnimatedSection>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="max-w-2xl">
-                <SectionLabel className="mb-3">Live Sourcing Rates</SectionLabel>
+                <SectionLabel className="mb-3">Commercial Export</SectionLabel>
                 <h1 className="text-3xl md:text-5xl font-bold text-dark-text tracking-tight mb-4">
-                  Current Market Rates
+                  Commodity Export Specifications
                 </h1>
                 <p className="text-lg md:text-xl text-muted leading-relaxed">
-                  Indicative agricultural product pricing for current sourcing requirements.
+                  Standard packaging calibrations, specifications, and bespoke export quotations for international buyers.
                 </p>
               </div>
 
-              {/* Validity & Source Tag */}
+              {/* Sourcing Desk Tag */}
               <div className="bg-white border border-slate-200/90 rounded-[4px] p-5 shadow-xs shrink-0 max-w-sm">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-                    Rate Reference
+                    Procurement Desk
                   </span>
                   <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-[2px] bg-gold/20 text-navy">
-                    {rateInfo.badgeLabel}
+                    Export Ready
                   </span>
                 </div>
 
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-xs text-slate-500">Last Published:</span>
-                  <span className="text-sm font-bold text-navy">{rateInfo.publishedDateFormatted}</span>
+                  <span className="text-xs text-slate-500">Commercial Terms:</span>
+                  <span className="text-sm font-bold text-navy">CIF / FOB Custom Quotes</span>
                 </div>
 
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  Status:{" "}
-                  <strong className={rateInfo.isExpired ? "text-amber-700" : "text-emerald-700"}>
-                    {rateInfo.validityText}
-                  </strong>
+                  Status: <strong className="text-emerald-700">Available for Export</strong>
                 </p>
               </div>
             </div>
@@ -84,16 +81,17 @@ export default function MarketRatesPage() {
       </section>
 
       {/* Prominent Top Disclaimer */}
-      <section className="bg-amber-50/70 border-b border-amber-200/70 py-4">
+      <section className="bg-slate-50 border-b border-slate-200 py-3.5">
         <Container>
-          <div className="flex items-start gap-3 text-xs md:text-sm text-amber-950">
-            <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-            <p className="leading-relaxed font-medium">
-              <strong>Important Market Disclaimer:</strong> {marketRateConfig.disclaimer}
+          <div className="flex items-start gap-3 text-xs text-slate-700">
+            <Info className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+            <p className="leading-relaxed">
+              <strong>Export Sourcing Notice:</strong> All agricultural commodities are quoted on a custom basis depending on target volume, caliber sorting, cold-chain packaging, and destination port. Submit an inquiry or contact our trade desk for official quotations.
             </p>
           </div>
         </Container>
       </section>
+
 
       {/* Main Rates Section */}
       <section className="py-[clamp(40px,6vw,80px)] bg-slate-50/50">
@@ -103,10 +101,10 @@ export default function MarketRatesPage() {
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
               <div>
                 <h2 className="text-base font-bold text-navy tracking-wide">
-                  Indicative Commodities Price List
+                  Commodities Export Specifications &amp; Quotations
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Updated per reference dataset {rateInfo.publishedDateFormatted} · All figures in INR (₹)
+                  Custom FOB &amp; CIF export quotations tailored to required volume, grading and destination
                 </p>
               </div>
               <span className="text-xs text-slate-400 font-medium">
@@ -120,18 +118,18 @@ export default function MarketRatesPage() {
                   <tr className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                     <th className="py-3 px-5">Product</th>
                     <th className="py-3 px-4">Category</th>
-                    <th className="py-3 px-4">Rate</th>
+                    <th className="py-3 px-4">Pricing</th>
                     <th className="py-3 px-4">Net Wt</th>
                     <th className="py-3 px-4">Gross Wt</th>
                     <th className="py-3 px-4">Packaging / Size</th>
-                    <th className="py-3 px-4">Rate Basis</th>
+                    <th className="py-3 px-4">Sourcing Belt</th>
                     <th className="py-3 px-4">Availability</th>
                     <th className="py-3 px-5 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
                   {agriculturalProducts.map((p) => {
-                    const whatsappUrl = createWhatsAppEnquiryUrl(p.name, p.variant, p.rate, p.rateUnit);
+                    const whatsappUrl = createWhatsAppEnquiryUrl(p.name, p.variant);
                     return (
                       <tr key={p.id} className="hover:bg-slate-50/60 transition-colors">
                         {/* Product */}
@@ -153,12 +151,11 @@ export default function MarketRatesPage() {
                         {/* Category */}
                         <td className="py-4 px-4 font-medium text-slate-600">{p.category}</td>
 
-                        {/* Rate */}
+                        {/* Pricing */}
                         <td className="py-4 px-4">
-                          <div className="font-bold text-navy text-sm">
-                            ₹{p.rate?.toLocaleString("en-IN")}{" "}
-                            <span className="text-xs font-normal text-slate-500">{p.rateUnit}</span>
-                          </div>
+                          <span className="inline-block px-2.5 py-1 text-xs font-semibold text-navy bg-slate-100 rounded-[2px]">
+                            Quote on Request
+                          </span>
                         </td>
 
                         {/* Net Weight */}
@@ -174,25 +171,17 @@ export default function MarketRatesPage() {
                           {p.hands && <span className="text-[11px] text-slate-500 block">Hands: {p.hands.join("/")}</span>}
                         </td>
 
-                        {/* Rate Basis */}
+                        {/* Sourcing Belt */}
                         <td className="py-4 px-4 font-medium">
-                          {p.rateBasis ? (
-                            <span className="px-2 py-0.5 rounded-[2px] bg-slate-100 text-slate-700 text-[11px] font-semibold">
-                              {p.rateBasis}
-                            </span>
-                          ) : p.location ? (
-                            <span className="px-2 py-0.5 rounded-[2px] bg-slate-100 text-slate-700 text-[11px]">
-                              {p.location}
-                            </span>
-                          ) : (
-                            "—"
-                          )}
+                          <span className="px-2 py-0.5 rounded-[2px] bg-slate-100 text-slate-700 text-[11px]">
+                            {p.location || p.origin || "India"}
+                          </span>
                         </td>
 
                         {/* Availability */}
                         <td className="py-4 px-4">
-                          <span className="text-[10px] uppercase font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-[2px] border border-amber-200/70">
-                            {p.availability}
+                          <span className="text-[10px] uppercase font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[2px] border border-emerald-200/70">
+                            {p.availability || "Available for Export"}
                           </span>
                         </td>
 
@@ -224,17 +213,17 @@ export default function MarketRatesPage() {
             </div>
           </div>
 
-          {/* MOBILE VIEW: Cards instead of horizontally cramped table */}
+          {/* MOBILE CARDS (visible on mobile, hidden md+) */}
           <div className="md:hidden space-y-4 mb-12">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Daily Rate Cards
+                Commodity Specifications
               </span>
               <span className="text-xs text-slate-400">{agriculturalProducts.length} Items</span>
             </div>
 
             {agriculturalProducts.map((p) => {
-              const whatsappUrl = createWhatsAppEnquiryUrl(p.name, p.variant, p.rate, p.rateUnit);
+              const whatsappUrl = createWhatsAppEnquiryUrl(p.name, p.variant);
               return (
                 <div
                   key={p.id}
@@ -257,11 +246,10 @@ export default function MarketRatesPage() {
                     </div>
                     <div className="text-right">
                       <span className="text-[10px] text-slate-400 uppercase font-semibold block">
-                        {rateInfo.rateLabel}
+                        Pricing
                       </span>
-                      <span className="text-lg font-bold text-navy">
-                        ₹{p.rate}{" "}
-                        <span className="text-xs font-normal text-slate-600">{p.rateUnit}</span>
+                      <span className="text-xs font-bold text-navy">
+                        Quote on Request
                       </span>
                     </div>
                   </div>
@@ -277,10 +265,10 @@ export default function MarketRatesPage() {
                         <span className="text-slate-400">Gross:</span> {p.grossWeight}
                       </div>
                     )}
-                    {(p.rateBasis || p.location) && (
+                    {p.location && (
                       <div>
-                        <span className="text-slate-400">Basis:</span>{" "}
-                        {p.rateBasis || p.location}
+                        <span className="text-slate-400">Origin:</span>{" "}
+                        {p.location}
                       </div>
                     )}
                     {p.packaging && (
@@ -301,10 +289,10 @@ export default function MarketRatesPage() {
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-2 text-emerald-700 bg-emerald-50 rounded-[3px] border border-emerald-200"
-                      aria-label="Enquire on WhatsApp"
+                      className="py-2 px-3 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-[3px] border border-emerald-200 flex items-center justify-center gap-1"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      WhatsApp
                     </a>
                   </div>
                 </div>

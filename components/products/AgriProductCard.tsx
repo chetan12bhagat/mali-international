@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Product } from "@/data/products";
-import { getRateStatusInfo } from "@/data/market-rates";
 import { createWhatsAppEnquiryUrl } from "@/data/company";
 
 interface AgriProductCardProps {
@@ -13,12 +12,9 @@ interface AgriProductCardProps {
 }
 
 export default function AgriProductCard({ product, priority = false }: AgriProductCardProps) {
-  const rateInfo = getRateStatusInfo();
   const whatsappUrl = createWhatsAppEnquiryUrl(
     product.name,
-    product.variant,
-    product.rate,
-    product.rateUnit
+    product.variant
   );
 
   return (
@@ -49,15 +45,6 @@ export default function AgriProductCard({ product, priority = false }: AgriProdu
             </span>
           )}
         </div>
-
-        {/* Rate Basis Pill */}
-        {product.rateBasis && (
-          <div className="absolute bottom-3 right-3 z-10 pointer-events-none">
-            <span className="px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider bg-navy/80 text-gold rounded-[2px]">
-              {product.rateBasis}
-            </span>
-          </div>
-        )}
       </Link>
 
       {/* Card Body */}
@@ -114,25 +101,21 @@ export default function AgriProductCard({ product, priority = false }: AgriProdu
           </div>
         </div>
 
-        {/* Rate Box & Status */}
+        {/* B2B Quotation Status & Actions */}
         <div className="pt-3 border-t border-light-gray mt-auto">
-          <div className="flex items-end justify-between gap-2 mb-3">
+          <div className="flex items-center justify-between gap-2 mb-3">
             <div>
               <span className="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">
-                {rateInfo.rateLabel}
+                Pricing
               </span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-lg font-bold text-navy">
-                  {product.currency || "₹"}
-                  {product.rate?.toLocaleString("en-IN")}
-                </span>
-                <span className="text-xs text-slate-500 font-medium">{product.rateUnit}</span>
-              </div>
+              <span className="text-xs font-semibold text-navy">
+                Quote on Request
+              </span>
             </div>
 
             <div className="text-right">
-              <span className="inline-block px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-amber-800 bg-amber-50 border border-amber-200/80 rounded-[2px]">
-                {product.availability || "Subject to confirmation"}
+              <span className="inline-block px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-emerald-850 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-[2px]">
+                {product.availability || "Available for Export"}
               </span>
             </div>
           </div>
@@ -151,7 +134,7 @@ export default function AgriProductCard({ product, priority = false }: AgriProdu
               href={`/request-quote?product=${encodeURIComponent(product.slug)}`}
               className="inline-flex items-center justify-center px-3 py-2 text-xs font-semibold text-white bg-navy hover:bg-navy-dark rounded-[3px] shadow-2xs transition-colors text-center"
             >
-              {rateInfo.isExpired ? "Request Quote" : "Request Quote"}
+              Request Quote
             </Link>
           </div>
 
@@ -170,3 +153,4 @@ export default function AgriProductCard({ product, priority = false }: AgriProdu
     </div>
   );
 }
+

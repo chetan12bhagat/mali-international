@@ -31,13 +31,14 @@ export const siteConfig = {
 export function createWhatsAppEnquiryUrl(
   productName: string,
   variant?: string,
-  rate?: number,
-  rateUnit?: string
+  _rate?: number,
+  _rateUnit?: string
 ): string {
   const phone = (company.whatsapp || company.phone || "").replace(/[^0-9]/g, "");
   const text = `Hello Mali International,\n\nI am interested in the following product:\n\nProduct: ${productName}${
     variant ? `\nVariant: ${variant}` : ""
-  }${rate ? `\nCurrent Indicative Rate: ₹${rate} ${rateUnit || ""}` : ""}\nQuantity Required: \nDestination: \n\nPlease share the latest price, availability and export details.`;
+  }\nQuantity Required: \nDestination Port: \n\nPlease share the export quotation, availability and shipping details.`;
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
+

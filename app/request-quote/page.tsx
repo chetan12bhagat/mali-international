@@ -118,8 +118,9 @@ function QuoteForm() {
               {matchedProduct.name} {matchedProduct.variant && `(${matchedProduct.variant})`}
             </span>
             <span className="text-xs text-slate-500 block">
-              Indicative Market Rate: ₹{matchedProduct.rate} {matchedProduct.rateUnit}
+              Origin: {matchedProduct.origin || "India"} · {matchedProduct.availability || "Available for Export"}
             </span>
+
           </div>
           <span className="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-[2px] font-semibold border border-emerald-200">
             Active Selection

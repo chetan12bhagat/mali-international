@@ -19,7 +19,7 @@ const CATEGORIES = [
   "Coconut",
 ] as const;
 
-type SortOption = "featured" | "name-asc" | "name-desc" | "rate-asc" | "rate-desc";
+type SortOption = "featured" | "name-asc" | "name-desc";
 
 export default function ProductSearchFilter({
   products,
@@ -38,15 +38,14 @@ export default function ProductSearchFilter({
 
   // Filter and Sort Pipeline
   const filteredProducts = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+
     return products
       .filter((product) => {
-        // Category matching
         const matchesCategory =
           selectedCategory === "All" ||
-          product.category.toLowerCase().includes(selectedCategory.toLowerCase());
+          product.category.toLowerCase() === selectedCategory.toLowerCase();
 
-        // Search text matching across name, variant, altName, location, category
-        const q = searchQuery.toLowerCase().trim();
         const matchesSearch =
           !q ||
           product.name.toLowerCase().includes(q) ||
@@ -64,11 +63,6 @@ export default function ProductSearchFilter({
             return a.name.localeCompare(b.name);
           case "name-desc":
             return b.name.localeCompare(a.name);
-          case "rate-asc":
-            // Safe comparison: compare rate numbers
-            return (a.rate || 0) - (b.rate || 0);
-          case "rate-desc":
-            return (b.rate || 0) - (a.rate || 0);
           default:
             return 0; // maintain default curated order
         }
@@ -120,8 +114,6 @@ export default function ProductSearchFilter({
               <option value="featured">Featured Sequence</option>
               <option value="name-asc">Name: A to Z</option>
               <option value="name-desc">Name: Z to A</option>
-              <option value="rate-asc">Lowest Indicative Rate</option>
-              <option value="rate-desc">Highest Indicative Rate</option>
             </select>
           </div>
         </div>

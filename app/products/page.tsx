@@ -9,12 +9,10 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import Button from "@/components/ui/Button";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { productCategories, getFeaturedAgriProducts } from "@/data/products";
-import { getRateStatusInfo } from "@/data/market-rates";
 
 export const metadata: Metadata = generatePageMetadata("products");
 
 export default function ProductsPage() {
-  const rateInfo = getRateStatusInfo();
   const featured = getFeaturedAgriProducts(4);
 
   return (
@@ -34,40 +32,41 @@ export default function ProductsPage() {
               <Button href="/products/agriculture" size="lg">
                 View Agricultural Products
               </Button>
-              <Button href="/market-rates" variant="outline" size="lg">
-                Current Market Rates
+              <Button href="/request-quote" variant="outline" size="lg">
+                Request Export Quote
               </Button>
             </div>
           </AnimatedSection>
         </Container>
       </section>
 
-      {/* Market Rates Spotlight Strip */}
+
+      {/* Sourcing Spotlight Strip */}
       <section className="py-6 bg-navy text-white border-y border-white/10">
         <Container>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold shrink-0">
-                <TrendingUp className="w-4 h-4" />
+                <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-sm font-semibold tracking-wide flex items-center gap-2">
-                  <span>Indicative Daily Market Rates Available</span>
+                  <span>Direct Export Procurement &amp; Commercial Sourcing</span>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-[2px] bg-gold text-navy">
-                    {rateInfo.badgeLabel}
+                    Export Ready
                   </span>
                 </p>
                 <p className="text-xs text-white/60">
-                  {rateInfo.validityText} · Subject to confirmation based on grade, quantity and port
+                  Custom CIF / FOB quotes tailored to grade, volume, packaging and destination port
                 </p>
               </div>
             </div>
 
             <Link
-              href="/market-rates"
+              href="/request-quote"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-gold hover:text-white transition-colors shrink-0"
             >
-              View Full Rate Table
+              Request a Custom Quote
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -79,94 +78,88 @@ export default function ProductsPage() {
         <Container>
           <AnimatedSection>
             <div className="mb-12 max-w-2xl">
-              <SectionLabel className="mb-3">Categories</SectionLabel>
-              <h2 className="text-2xl md:text-3xl font-bold text-dark-text mb-4">
-                Sourcing Portfolios
-              </h2>
-              <p className="text-muted leading-relaxed">
-                Direct farm coordination, cold-chain monitoring, and calibrated export packing across
-                key commodity categories.
+              <SectionLabel className="mb-4">CATEGORIES</SectionLabel>
+              <h2 className="text-dark-text">Our Product Verticals</h2>
+              <p className="text-muted mt-4 text-base md:text-lg">
+                Structured sourcing across agriculture, food commodities, minerals, and specialized contract manufacturing.
               </p>
             </div>
-          </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {productCategories.map((cat, i) => (
-              <AnimatedSection key={cat.id} delay={i * 0.08}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {productCategories.map((category) => (
                 <Link
-                  href={`/products/${cat.slug}`}
-                  className="group flex flex-col bg-white border border-light-gray rounded-[4px] overflow-hidden hover:border-gold/40 hover:shadow-[0_8px_24px_rgba(10,25,47,0.06)] transition-all duration-300"
+                  key={category.id}
+                  href={`/products/${category.slug}`}
+                  className="group relative block overflow-hidden rounded-[4px] border border-light-gray bg-white shadow-xs hover:border-gold/50 transition-all duration-300"
                 >
-                  <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                  <div className="relative h-64 w-full overflow-hidden bg-slate-100">
                     <Image
-                      src={cat.image}
-                      alt={cat.title}
+                      src={category.image}
+                      alt={category.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute top-3 left-3 px-2.5 py-1 text-[11px] font-bold text-gold bg-navy/90 rounded-[2px] tracking-wider">
-                      {cat.number}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                      <span className="text-[10px] uppercase tracking-widest font-semibold text-gold block mb-1">
+                        Vertical
+                      </span>
+                      <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-gold transition-colors">
+                        {category.title}
+                      </h3>
+                      <p className="text-xs text-white/80 line-clamp-2">{category.description}</p>
                     </div>
                   </div>
 
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold text-dark-text group-hover:text-navy transition-colors duration-200 mb-2">
-                        {cat.title}
-                      </h3>
-                      <p className="text-sm text-muted leading-relaxed mb-6">
-                        {cat.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-navy group-hover:text-gold transition-colors flex items-center gap-1">
-                        Explore Category
-                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-                      </span>
-                      {cat.productCount && (
-                        <span className="text-xs text-slate-400 font-medium">
-                          {cat.productCount} Commodities
-                        </span>
-                      )}
+                  <div className="p-6">
+                    <div className="flex items-center justify-between text-xs font-semibold text-navy group-hover:text-gold transition-colors">
+                      <span>Explore {category.title} Catalog</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
                 </Link>
-              </AnimatedSection>
-            ))}
-          </div>
+              ))}
+            </div>
+          </AnimatedSection>
         </Container>
       </section>
 
-      {/* Featured Rate Preview */}
-      <section className="py-[clamp(50px,8vw,100px)] bg-slate-50 border-t border-light-gray">
+      {/* Featured Agriculture Commodities Preview */}
+      <section className="py-[clamp(60px,10vw,120px)] bg-slate-50 border-t border-light-gray">
         <Container>
-          <AnimatedSection>
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-              <div>
-                <SectionLabel className="mb-2">Market Watch</SectionLabel>
-                <h2 className="text-2xl md:text-3xl font-bold text-dark-text">
-                  Selected Commodities
-                </h2>
-              </div>
-              <Link
-                href="/products/agriculture"
-                className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy hover:text-gold transition-colors"
-              >
-                View all 14 agricultural products
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+              <SectionLabel className="mb-2">COMMERCIAL CATALOGUE</SectionLabel>
+              <h2 className="text-2xl md:text-3xl font-bold text-dark-text">
+                Agricultural Commodities
+              </h2>
             </div>
-          </AnimatedSection>
+            <Link
+              href="/products/agriculture"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy hover:text-gold transition-colors"
+            >
+              View all commodities
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featured.map((p) => (
               <div
                 key={p.id}
-                className="bg-white p-5 rounded-[4px] border border-slate-200/80 shadow-2xs flex flex-col justify-between"
+                className="bg-white border border-light-gray rounded-[4px] p-4 flex flex-col justify-between shadow-2xs hover:shadow-md transition-shadow"
               >
                 <div>
+                  <div className="relative aspect-4/3 rounded-[3px] overflow-hidden mb-3 bg-slate-100">
+                    <Image
+                      src={p.image || "/images/products/onion.jpg"}
+                      alt={p.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover"
+                    />
+                  </div>
                   <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
                     {p.category}
                   </span>
@@ -182,10 +175,10 @@ export default function ProductsPage() {
                 <div className="pt-3 border-t border-slate-100">
                   <div className="flex items-baseline justify-between mb-3">
                     <span className="text-[10px] text-slate-400 uppercase font-semibold">
-                      {rateInfo.rateLabel}
+                      Pricing
                     </span>
-                    <span className="text-sm font-bold text-navy">
-                      ₹{p.rate} {p.rateUnit}
+                    <span className="text-xs font-semibold text-navy">
+                      Quote on Request
                     </span>
                   </div>
                   <Link

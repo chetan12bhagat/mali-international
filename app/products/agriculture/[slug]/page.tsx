@@ -89,13 +89,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const rateInfo = getRateStatusInfo();
   const relatedProducts = getRelatedProducts(product.slug, 4);
   const whatsappUrl = createWhatsAppEnquiryUrl(
     product.name,
-    product.variant,
-    product.rate,
-    product.rateUnit
+    product.variant
   );
 
   // Schema.org Structured Data
@@ -112,10 +109,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     },
     offers: {
       "@type": "Offer",
-      priceCurrency: "INR",
-      price: product.rate,
       availability: "https://schema.org/InStock",
-      priceValidUntil: "2026-08-28",
       seller: {
         "@type": "Organization",
         name: "Mali International",
@@ -160,8 +154,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Breadcrumb & Navigation */}
-      <section className="pt-28 pb-6 bg-off-white border-b border-light-gray">
+      {/* HERO & BREADCRUMB */}
+      <section className="pt-32 pb-8 bg-off-white border-b border-light-gray">
         <Container>
           <Breadcrumb
             items={[
@@ -174,23 +168,25 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </Container>
       </section>
 
-      {/* Main Product Showcase */}
+      {/* MAIN PRODUCT DETAIL SECTION */}
       <section className="py-[clamp(40px,6vw,80px)] bg-white">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* LEFT COLUMN: Large 4:3 Image & Visual Highlights */}
-            <div className="lg:col-span-5 xl:col-span-6 flex flex-col gap-6">
-              <div className="relative aspect-[4/3] w-full rounded-[4px] overflow-hidden border border-slate-200 shadow-xs bg-slate-50">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14">
+            {/* LEFT COLUMN: 4:3 Image & Quality Box */}
+            <div className="lg:col-span-5 xl:col-span-6 space-y-6">
+              {/* Product Image Frame */}
+              <div className="relative aspect-[4/3] w-full rounded-[4px] overflow-hidden bg-slate-100 border border-light-gray shadow-xs">
                 <Image
                   src={product.image || "/images/products/onion.jpg"}
                   alt={product.name}
                   fill
+                  priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover object-center"
-                  priority
                 />
+                {/* Category & Variant Badge */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                  <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/95 text-navy rounded-[2px] shadow-2xs border border-slate-200">
+                  <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/95 text-navy rounded-[2px] shadow-xs">
                     {product.category}
                   </span>
                   {product.variant && (
@@ -199,14 +195,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     </span>
                   )}
                 </div>
-
-                {product.rateBasis && (
-                  <div className="absolute bottom-4 right-4">
-                    <span className="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider bg-navy/90 text-gold rounded-[2px] shadow-xs">
-                      Rate Basis: {product.rateBasis}
-                    </span>
-                  </div>
-                )}
               </div>
 
               {/* Sourcing Highlights Card */}
@@ -232,7 +220,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Details, Rate Box, Specifications & Actions */}
+            {/* RIGHT COLUMN: Details, Export Quotation Box, Specifications & Actions */}
             <div className="lg:col-span-7 xl:col-span-6">
               {/* Category & Title */}
               <div className="mb-6">
@@ -257,52 +245,37 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </p>
               </div>
 
-              {/* RATE BOX */}
+              {/* EXPORT QUOTATION BOX */}
               <div className="bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200/90 rounded-[4px] p-6 mb-8 shadow-xs">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <span className="text-xs font-bold tracking-wider uppercase text-slate-500 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-gold" />
-                    {rateInfo.rateLabel}
+                  <span className="text-xs font-bold tracking-wider uppercase text-slate-500">
+                    Commercial Sourcing
                   </span>
-                  <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300/80 rounded-[2px]">
-                    {product.availability || "SUBJECT TO CONFIRMATION"}
+                  <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-[2px]">
+                    {product.availability || "AVAILABLE FOR EXPORT"}
                   </span>
                 </div>
 
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-3xl md:text-4xl font-extrabold text-navy tracking-tight">
-                    {product.currency || "₹"}
-                    {product.rate?.toLocaleString("en-IN")}
+                <div className="mb-4">
+                  <span className="text-2xl md:text-3xl font-bold text-navy tracking-tight block mb-1">
+                    Pricing on Request
                   </span>
-                  <span className="text-base md:text-lg font-medium text-slate-600">
-                    {product.rateUnit}
-                  </span>
-                  {product.rateBasis && (
-                    <span className="ml-2 text-xs font-semibold text-gold uppercase px-2 py-0.5 bg-navy rounded-[2px]">
-                      {product.rateBasis}
-                    </span>
-                  )}
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Custom FOB &amp; CIF export quotations tailored to your required volume, packaging specifications, and target destination port.
+                  </p>
                 </div>
 
-                {/* Rate Metadata */}
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 py-3 border-y border-slate-200/80 mb-3">
+                {/* Sourcing Details */}
+                <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 py-3 border-y border-slate-200/80">
                   <div>
-                    <span className="text-slate-400">Published Date:</span>{" "}
-                    <span className="font-semibold text-slate-700">{rateInfo.publishedDateFormatted}</span>
+                    <span className="text-slate-400">Origin:</span>{" "}
+                    <span className="font-semibold text-slate-700">{product.origin}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400">Rate Validity:</span>{" "}
-                    <span className={`font-semibold ${rateInfo.isExpired ? "text-amber-700" : "text-emerald-700"}`}>
-                      {rateInfo.isExpired ? "24 Hours (Expired)" : "24 Hours"}
-                    </span>
+                    <span className="text-slate-400">Packaging:</span>{" "}
+                    <span className="font-semibold text-slate-700">{product.packaging || "Export Standard"}</span>
                   </div>
                 </div>
-
-                {/* Pricing Disclaimer */}
-                <p className="text-[11px] text-slate-400 leading-relaxed italic">
-                  &ldquo;Prices may change according to market conditions, quality, availability,
-                  quantity, packaging and destination.&rdquo;
-                </p>
               </div>
 
               {/* PRODUCT SPECIFICATIONS TABLE (Showing only non-empty fields) */}
@@ -311,13 +284,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   Product Specifications
                 </h3>
                 <div className="border border-slate-200 rounded-[3px] overflow-hidden text-sm">
-                  {product.rateBasis && (
-                    <div className="flex justify-between py-2.5 px-4 bg-white border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Rate Basis</span>
-                      <span className="text-dark-text font-semibold">{product.rateBasis}</span>
-                    </div>
-                  )}
-
                   {product.netWeight && (
                     <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Net Weight</span>
@@ -332,10 +298,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     </div>
                   )}
 
-                  {product.packaging && (
+                  {product.size && (
                     <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Packaging</span>
-                      <span className="text-dark-text font-semibold">{product.packaging}</span>
+                      <span className="text-slate-500 font-medium">Size / Calibration</span>
+                      <span className="text-dark-text font-semibold">{product.size}</span>
                     </div>
                   )}
 
@@ -343,44 +309,50 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     <div className="flex justify-between py-2.5 px-4 bg-white border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Available Pack Sizes</span>
                       <span className="text-dark-text font-semibold">
-                        {product.availablePackSizes.join(" / ")}
+                        {product.availablePackSizes.join(", ")}
                       </span>
-                    </div>
-                  )}
-
-                  {product.size && (
-                    <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Product Calibration / Size</span>
-                      <span className="text-dark-text font-semibold">{product.size}</span>
                     </div>
                   )}
 
                   {product.hands && (
+                    <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Hands</span>
+                      <span className="text-dark-text font-semibold">{product.hands.join(", ")}</span>
+                    </div>
+                  )}
+
+                  {product.packaging && (
                     <div className="flex justify-between py-2.5 px-4 bg-white border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Banana Hands</span>
-                      <span className="text-dark-text font-semibold">
-                        {product.hands.join(" / ")} hands
-                      </span>
+                      <span className="text-slate-500 font-medium">Standard Packaging</span>
+                      <span className="text-dark-text font-semibold">{product.packaging}</span>
+                    </div>
+                  )}
+
+                  {product.origin && (
+                    <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Origin</span>
+                      <span className="text-dark-text font-semibold">{product.origin}</span>
                     </div>
                   )}
 
                   {product.location && (
-                    <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Origin / Farm Belt</span>
-                      <span className="text-dark-text font-semibold">{product.location}, India</span>
+                    <div className="flex justify-between py-2.5 px-4 bg-white border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Sourcing Belt</span>
+                      <span className="text-dark-text font-semibold">{product.location}</span>
                     </div>
                   )}
 
                   {product.destination && (
-                    <div className="flex justify-between py-2.5 px-4 bg-white border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Target Destination</span>
+                    <div className="flex justify-between py-2.5 px-4 bg-slate-50/70 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Frequent Export Destinations</span>
                       <span className="text-dark-text font-semibold">{product.destination}</span>
                     </div>
                   )}
 
+
                   <div className="flex justify-between py-2.5 px-4 bg-slate-50/70">
                     <span className="text-slate-500 font-medium">Availability</span>
-                    <span className="text-amber-700 font-semibold">{product.availability}</span>
+                    <span className="text-emerald-800 font-semibold">{product.availability || "Available for Export"}</span>
                   </div>
                 </div>
               </div>
@@ -391,7 +363,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   href={`/request-quote?product=${encodeURIComponent(product.slug)}`}
                   className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-navy text-white text-sm font-semibold rounded-[3px] hover:bg-navy-dark shadow-xs transition-colors text-center"
                 >
-                  {rateInfo.isExpired ? "Request Today's Price" : "Request Current Quote"}
+                  Request Export Quotation
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
