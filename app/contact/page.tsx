@@ -87,13 +87,14 @@ export default function ContactPage() {
                     <div>
                       <span className="text-xs uppercase tracking-wider text-muted block mb-1">WhatsApp</span>
                       <a
-                        href={`https://wa.me/${company.whatsapp}`}
+                        href={`https://wa.me/${company.whatsapp.replace(/[^0-9]/g, "")}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-navy font-medium hover:text-gold transition-colors"
                       >
                         {company.whatsapp}
                       </a>
+
                     </div>
                   )}
                   <div>

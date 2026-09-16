@@ -4,9 +4,10 @@ export const company = {
   description:
     "Mali International helps international businesses source quality products from India through reliable supplier coordination, procurement support and export solutions.",
   email: "contact@maliinternational.com",
-  phone: "+91 98220 00000",
-  whatsapp: "+919822000000",
+  phone: "+91 80109 32020",
+  whatsapp: "+91 80109 32020",
   address: "Navi Mumbai / Solapur",
+
   city: "Navi Mumbai",
   state: "Maharashtra",
   country: "India",
