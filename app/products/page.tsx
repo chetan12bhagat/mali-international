@@ -173,12 +173,12 @@ export default function ProductsPage() {
                 </div>
 
                 <div className="pt-3 border-t border-slate-100">
-                  <div className="flex items-baseline justify-between mb-3">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold">
-                      Pricing
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      {p.origin ? p.origin.split("(")[0].trim() : "Origin: India"}
                     </span>
-                    <span className="text-xs font-semibold text-navy">
-                      Quote on Request
+                    <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[2px]">
+                      {p.availability || "Available"}
                     </span>
                   </div>
                   <Link
@@ -188,6 +188,7 @@ export default function ProductsPage() {
                     View Specifications
                   </Link>
                 </div>
+
               </div>
             ))}
           </div>

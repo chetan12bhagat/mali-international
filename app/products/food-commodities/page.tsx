@@ -54,10 +54,10 @@ export default function FoodCommoditiesPage() {
                   </div>
                   <div className="mt-4 pt-4 border-t border-light-gray">
                     <Link
-                      href="/request-quote"
+                      href="/contact"
                       className="text-sm font-medium text-navy hover:text-gold transition-colors"
                     >
-                      Request Quote →
+                      Inquire Now →
                     </Link>
                   </div>
                 </div>
@@ -75,8 +75,8 @@ export default function FoodCommoditiesPage() {
               <p className="text-white/50 mb-8 text-lg">
                 Share your product requirements and specifications.
               </p>
-              <Button href="/request-quote" variant="secondary" size="lg">
-                Request a Quote
+              <Button href="/contact" variant="secondary" size="lg">
+                Inquire Now
               </Button>
             </div>
           </AnimatedSection>

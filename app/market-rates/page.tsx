@@ -118,13 +118,13 @@ export default function MarketRatesPage() {
                   <tr className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                     <th className="py-3 px-5">Product</th>
                     <th className="py-3 px-4">Category</th>
-                    <th className="py-3 px-4">Pricing</th>
+                    <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4">Net Wt</th>
                     <th className="py-3 px-4">Gross Wt</th>
                     <th className="py-3 px-4">Packaging / Size</th>
                     <th className="py-3 px-4">Sourcing Belt</th>
                     <th className="py-3 px-4">Availability</th>
-                    <th className="py-3 px-5 text-right">Action</th>
+                    <th className="py-3 px-5 text-right">Inquiry</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -151,10 +151,10 @@ export default function MarketRatesPage() {
                         {/* Category */}
                         <td className="py-4 px-4 font-medium text-slate-600">{p.category}</td>
 
-                        {/* Pricing */}
+                        {/* Status */}
                         <td className="py-4 px-4">
-                          <span className="inline-block px-2.5 py-1 text-xs font-semibold text-navy bg-slate-100 rounded-[2px]">
-                            Quote on Request
+                          <span className="inline-block px-2.5 py-1 text-xs font-semibold text-emerald-800 bg-emerald-50 rounded-[2px]">
+                            Export Ready
                           </span>
                         </td>
 
@@ -188,26 +188,21 @@ export default function MarketRatesPage() {
                         {/* Action */}
                         <td className="py-4 px-5 text-right">
                           <div className="inline-flex items-center gap-1.5 justify-end">
-                            <Link
-                              href={`/request-quote?product=${encodeURIComponent(p.slug)}`}
-                              className="px-3 py-1.5 bg-navy text-white text-xs font-semibold rounded-[3px] hover:bg-navy-dark transition-colors whitespace-nowrap"
-                            >
-                              Request Quote
-                            </Link>
                             <a
                               href={whatsappUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="p-1.5 text-emerald-600 hover:text-emerald-700 bg-emerald-50 rounded-[3px] border border-emerald-200"
-                              title="Enquire on WhatsApp"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-[3px] transition-colors whitespace-nowrap shadow-2xs"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
+                              WhatsApp
                             </a>
                           </div>
                         </td>
                       </tr>
                     );
                   })}
+
                 </tbody>
               </table>
             </div>
@@ -245,11 +240,8 @@ export default function MarketRatesPage() {
                       )}
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-slate-400 uppercase font-semibold block">
-                        Pricing
-                      </span>
-                      <span className="text-xs font-bold text-navy">
-                        Quote on Request
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Export Ready
                       </span>
                     </div>
                   </div>
@@ -278,20 +270,20 @@ export default function MarketRatesPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 pt-1">
+                  <div className="grid grid-cols-2 gap-2 pt-1">
                     <Link
-                      href={`/request-quote?product=${encodeURIComponent(p.slug)}`}
-                      className="flex-1 py-2 text-center text-xs font-semibold text-white bg-navy rounded-[3px]"
+                      href={`/products/agriculture/${p.slug}`}
+                      className="py-2 text-center text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-[3px] border border-slate-200 transition-colors"
                     >
-                      Request Quote
+                      Details
                     </Link>
                     <a
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="py-2 px-3 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-[3px] border border-emerald-200 flex items-center justify-center gap-1"
+                      className="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-[3px] flex items-center justify-center gap-1.5 transition-colors shadow-xs"
                     >
-                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      <MessageCircle className="w-3.5 h-3.5" />
                       WhatsApp
                     </a>
                   </div>

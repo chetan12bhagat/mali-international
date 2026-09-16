@@ -257,13 +257,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
 
                 <div className="mb-4">
-                  <span className="text-2xl md:text-3xl font-bold text-navy tracking-tight block mb-1">
-                    Pricing on Request
+                  <span className="text-xl md:text-2xl font-bold text-navy tracking-tight block mb-1">
+                    Export Ready Commodity
                   </span>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Custom FOB &amp; CIF export quotations tailored to your required volume, packaging specifications, and target destination port.
+                    Direct farm sourcing and calibrated export packing. Inquire directly on WhatsApp for availability, container booking and shipping schedules.
                   </p>
                 </div>
+
 
                 {/* Sourcing Details */}
                 <div className="grid grid-cols-2 gap-2 text-xs text-slate-500 py-3 border-y border-slate-200/80">
@@ -357,26 +358,27 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
               </div>
 
-              {/* ACTION CTAs: Request Quote & WhatsApp Enquiry */}
+              {/* ACTION CTAs: WhatsApp Enquiry & Contact */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-light-gray">
-                <Link
-                  href={`/request-quote?product=${encodeURIComponent(product.slug)}`}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-navy text-white text-sm font-semibold rounded-[3px] hover:bg-navy-dark shadow-xs transition-colors text-center"
-                >
-                  Request Export Quotation
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-[3px] shadow-xs transition-colors text-center"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-[3px] shadow-xs transition-colors text-center"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Enquire on WhatsApp
                 </a>
+
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-navy text-white text-sm font-semibold rounded-[3px] hover:bg-navy-dark shadow-xs transition-colors text-center"
+                >
+                  Contact Trade Desk
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
+
             </div>
           </div>
         </Container>
